@@ -6,12 +6,11 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
 
-from django.contrib.auth.models import User
-
 from markitup.fields import MarkupField
 
 from symposion.proposals.models import ProposalBase
 from symposion.schedule.models import Presentation
+from symposion.utils.user import User
 
 
 class ProposalScoreExpression(object):

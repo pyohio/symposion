@@ -6,11 +6,10 @@ from django.db import models
 from django.db.models.signals import post_init, post_save
 from django.utils.translation import ugettext_lazy as _
 
-from django.contrib.auth.models import User
-
 from symposion.conference.models import Conference
+from symposion.utils.user import User
 
-from symposion.sponsorship.managers import SponsorManager
+from .managers import SponsorManager
 
 
 class SponsorLevel(models.Model):

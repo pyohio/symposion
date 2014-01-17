@@ -10,7 +10,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import static
 
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from account.models import EmailAddress
@@ -18,6 +17,7 @@ from symposion.proposals.models import ProposalBase, ProposalSection, ProposalKi
 from symposion.proposals.models import SupportingDocument, AdditionalSpeaker
 from symposion.speakers.models import Speaker
 from symposion.utils.mail import send_email
+from symposion.utils.user import User
 
 from symposion.proposals.forms import AddSpeakerForm, SupportingDocumentCreateForm
 

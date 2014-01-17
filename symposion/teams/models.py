@@ -2,9 +2,11 @@ import datetime
 
 from django.db import models
 
+from django.contrib.auth.models import Permission
+
 import reversion
 
-from django.contrib.auth.models import Permission, User
+from symposion.utils.user import User
 
 
 TEAM_ACCESS_CHOICES = [

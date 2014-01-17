@@ -3,12 +3,12 @@ import random
 
 from django.shortcuts import render, redirect
 
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 import account.views
 
 import symposion.forms
+from symposion.utils.user import User
 
 
 class SignupView(account.views.SignupView):

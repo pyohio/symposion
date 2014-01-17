@@ -4,11 +4,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 
 from symposion.proposals.models import ProposalBase
-from symposion.speakers.forms import SpeakerForm
-from symposion.speakers.models import Speaker
+from symposion.utils.user import User
+
+from .forms import SpeakerForm
+from .models import Speaker
 
 
 @login_required
