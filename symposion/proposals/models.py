@@ -103,6 +103,9 @@ class ProposalBase(models.Model):
     additional_speakers = models.ManyToManyField("speakers.Speaker", through="AdditionalSpeaker", blank=True)
     cancelled = models.BooleanField(default=False)
     
+    def __unicode__(self):
+        return unicode(self.title)
+    
     def can_edit(self):
         return True
     
