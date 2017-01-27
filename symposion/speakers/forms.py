@@ -13,7 +13,7 @@ class SpeakerForm(forms.ModelForm):
             "name",
             "biography",
             "photo",
-            "twitter_name",
+            "twitter_username",
         ]
         widgets = {
             "biography": MarkItUpWidget(),
