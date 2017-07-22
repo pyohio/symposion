@@ -24,6 +24,10 @@ class Speaker(models.Model):
         blank=True,
         help_text="Your Twitter account"
     )
+    reviewer = models.EmailField(
+        blank=True,
+        help_text=("email of a person who will be allowed to review and approve the produced video of your talk(s)."),
+    )
     annotation = models.TextField()  # staff only
     invite_email = models.CharField(max_length=200, unique=True, null=True, db_index=True)
     invite_token = models.CharField(max_length=40, db_index=True)

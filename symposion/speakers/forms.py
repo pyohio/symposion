@@ -14,6 +14,7 @@ class SpeakerForm(forms.ModelForm):
             "biography",
             "photo",
             "twitter_username",
+            "reviewer",
         ]
         widgets = {
             "biography": MarkItUpWidget(),
