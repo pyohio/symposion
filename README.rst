@@ -1,3 +1,9 @@
+THIS IS A FORK
+--------------
+
+*This is a fork of Symposion that is used for the PyOhio website. You shouldn't
+clone or use this unless you're working on the PyOhio site.*
+
 Symposion
 ---------
 
