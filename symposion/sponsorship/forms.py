@@ -5,10 +5,11 @@ from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.contrib.admin.widgets import AdminFileWidget
 from django.utils.translation import ugettext_lazy as _
 
-from symposion.sponsorship.models import Sponsor, SponsorBenefit
+from symposion.sponsorship.models import Sponsor, SponsorBenefit, SponsorLevel
 
 
 class SponsorApplicationForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         kwargs.update({
@@ -18,6 +19,7 @@ class SponsorApplicationForm(forms.ModelForm):
             }
         })
         super(SponsorApplicationForm, self).__init__(*args, **kwargs)
+        self.fields['level'].queryset = SponsorLevel.objects.filter(available=True)
 
     class Meta:
         model = Sponsor

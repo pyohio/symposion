@@ -53,6 +53,7 @@ class SponsorLevel(models.Model):
     order = models.IntegerField(_("Order"), default=0)
     cost = models.PositiveIntegerField(_("Cost"))
     description = models.TextField(_("Description"), blank=True, help_text=_("This is private."))
+    available = models.BooleanField(_("Available?"), default=True)
 
     class Meta:
         ordering = ["conference", "order"]
