@@ -11,17 +11,17 @@ class ProposalProxy(object):
         ''' Overridden getattr to anonymize speaker data '''
 
         if attr == "speaker":
-             return Parrot("Primary Speaker")
+            return Parrot("Primary Speaker")
         elif attr == "additional_speakers":
-             return None
+            return None
         elif attr == "speakers":
-             return self._speakers
+            return self._speakers
         elif attr == "additional_notes" :
-             return Parrot("Additional Notes")
+            return Parrot("Additional Notes")
         elif attr == "additional_notes_html":
-             return Parrot("Additional Notes HTML")
+            return Parrot("Additional Notes HTML")
         else:
-             return getattr(self.__proposal__, attr)
+            return getattr(self.__proposal__, attr)
 
     def _speakers(self):
         for i, j in enumerate(self.__proposal__.speakers()):
