@@ -76,7 +76,7 @@ def schedule_list(request, slug=None):
         raise Http404()
 
     presentations = Presentation.objects.filter(section=schedule.section)
-    presentations = presentations.exclude(cancelled=True)
+    presentations = presentations.exclude(cancelled=True).order_by("title")
 
     ctx = {
         "schedule": schedule,
@@ -91,7 +91,7 @@ def schedule_list_csv(request, slug=None):
         raise Http404()
 
     presentations = Presentation.objects.filter(section=schedule.section)
-    presentations = presentations.exclude(cancelled=True).order_by("title")
+    presentations = presentations.exclude(cancelled=True).order_by("id")
     response = HttpResponse(content_type="text/csv")
 
     if slug:
