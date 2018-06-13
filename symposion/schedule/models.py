@@ -213,7 +213,7 @@ class Presentation(models.Model):
 
     def speakers(self):
         yield self.speaker
-        for speaker in self.additional_speakers.all():
+        for speaker in self.proposal.additional_speakers.all():
             if speaker.user:
                 yield speaker
 
