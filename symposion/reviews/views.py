@@ -1,3 +1,5 @@
+import difflib
+
 from django.core.mail import send_mass_mail
 from django.db.models import Q
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed
@@ -290,13 +292,27 @@ def review_detail(request, pk):
 
     messages = [anonymous_review.MessageProxy(message) for message in messages]
 
+    changes = {'test': '<b>hi</b>'}
+    try:
+        presentation = proposal.presentation
+        differ = difflib.HtmlDiff()
+        if proposal.title != presentation.title:
+            changes['title_diff'] = differ.make_table([proposal.title], [presentation.title], 'Proposal', 'Presentation')
+        if proposal.abstract != presentation.abstract:
+            changes['abstract_diff'] = differ.make_table(proposal.abstract, presentation.abstract, 'Proposal', 'Presentation')
+        if proposal.description != presentation.description:
+            changes['description_diff'] = differ.make_table(proposal.description, presentation.description, 'Proposal', 'Presentation')
+    except:
+        raise
+
     return render(request, "symposion/reviews/review_detail.html", {
         "proposal": proposal,
         "latest_vote": latest_vote,
         "reviews": reviews,
         "review_messages": messages,
         "review_form": review_form,
-        "message_form": message_form
+        "message_form": message_form,
+        "proposal_changes": changes,
     })
 
 
