@@ -297,11 +297,14 @@ def review_detail(request, pk):
         presentation = proposal.presentation
         differ = difflib.HtmlDiff()
         if proposal.title != presentation.title:
-            changes['title_diff'] = differ.make_table([proposal.title], [presentation.title], 'Proposal', 'Presentation')
+            changes['title_diff'] = differ.make_table([proposal.title],
+                    [presentation.title], 'Proposal', 'Presentation')
         if proposal.abstract != presentation.abstract:
-            changes['abstract_diff'] = differ.make_table(proposal.abstract, presentation.abstract, 'Proposal', 'Presentation')
+            changes['abstract_diff'] = differ.make_table(
+                    proposal.abstract.split('\n'), presentation.abstract.split('\n'), 'Proposal', 'Presentation')
         if proposal.description != presentation.description:
-            changes['description_diff'] = differ.make_table(proposal.description, presentation.description, 'Proposal', 'Presentation')
+            changes['description_diff'] = differ.make_table(
+                    proposal.description.split('\n'), presentation.description.split('\n'), 'Proposal', 'Presentation')
     except:
         # no presentation
         pass
