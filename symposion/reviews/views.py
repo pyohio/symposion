@@ -303,7 +303,8 @@ def review_detail(request, pk):
         if proposal.description != presentation.description:
             changes['description_diff'] = differ.make_table(proposal.description, presentation.description, 'Proposal', 'Presentation')
     except:
-        raise
+        # no presentation
+        pass
 
     return render(request, "symposion/reviews/review_detail.html", {
         "proposal": proposal,
