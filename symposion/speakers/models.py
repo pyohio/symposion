@@ -20,6 +20,10 @@ def speaker_model():
     return object_from_settings("SYMPOSION_SPEAKER_MODEL", default)
 
 
+def speaker_image_path(instance, filename):
+    return 'speaker_photo/{0}/{1}'.format(instance.user.id, filename)
+
+
 @python_2_unicode_compatible
 class SpeakerBase(models.Model):
     ''' Base class for conference speaker profiles. This model is not meant to
@@ -41,7 +45,7 @@ class SpeakerBase(models.Model):
                                                          "markdown-cheat-sheet/target='_blank'>"
                                                          "Markdown</a>."), verbose_name=_("Biography"))
     biography_html = models.TextField(blank=True)
-    photo = models.ImageField(upload_to="speaker_photos", blank=True, verbose_name=_("Photo"))
+    photo = models.ImageField(upload_to=speaker_image_path, blank=True, verbose_name=_("Photo"))
     annotation = models.TextField(verbose_name=_("Annotation"))  # staff only
     invite_email = models.CharField(max_length=200, unique=True, null=True, db_index=True, verbose_name=_("Invite_email"))
     invite_token = models.CharField(max_length=40, db_index=True, verbose_name=_("Invite token"))
