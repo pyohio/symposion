@@ -45,9 +45,7 @@ class SpeakerBase(models.Model):
                                                          "markdown-cheat-sheet/target='_blank'>"
                                                          "Markdown</a>."), verbose_name=_("Biography"))
     biography_html = models.TextField(blank=True)
-
     photo = models.ImageField(upload_to=speaker_image_path, blank=True, verbose_name=_("Photo"))
-
     annotation = models.TextField(verbose_name=_("Annotation"))  # staff only
     invite_email = models.CharField(max_length=200, unique=True, null=True, db_index=True, verbose_name=_("Invite_email"))
     invite_token = models.CharField(max_length=40, db_index=True, verbose_name=_("Invite token"))
