@@ -190,8 +190,9 @@ class Presentation(models.Model):
     abstract = models.TextField(verbose_name=_("Abstract"))
     abstract_html = models.TextField(blank=True)
     speaker = models.ForeignKey(Speaker, related_name="presentations", verbose_name=_("Speaker"))
-    additional_speakers = models.ManyToManyField(Speaker, related_name="copresentations",
-                                                 blank=True, verbose_name=_("Additional speakers"))
+    # Removing broken relation and using speakers from proposal in speakers property below
+    #additional_speakers = models.ManyToManyField(Speaker, related_name="copresentations",
+    #                                             blank=True, verbose_name=_("Additional speakers"))
     cancelled = models.BooleanField(default=False, verbose_name=_("Cancelled"))
     proposal_base = models.OneToOneField(ProposalBase, related_name="presentation", verbose_name=_("Proposal base"))
     section = models.ForeignKey(Section, related_name="presentations", verbose_name=_("Section"))
