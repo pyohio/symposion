@@ -267,6 +267,36 @@ def review_detail(request, pk):
                     proposal.result.save()
 
             return redirect(request.path)
+        elif "update_title" in request.POST:
+            if admin:
+                action = request.POST["update_title"]
+                if action == "Apply":
+                    proposal.presentation.title = proposal.title
+                    proposal.presentation.save()
+                elif action == "Reject":
+                    proposal.title = proposal.presentation.title
+                    proposal.save()
+            return redirect(request.path + '#proposal-updates')
+        elif "update_description" in request.POST:
+            if admin:
+                action = request.POST["update_description"]
+                if action == "Apply":
+                    proposal.presentation.description = proposal.description
+                    proposal.presentation.save()
+                elif action == "Reject":
+                    proposal.description = proposal.presentation.description
+                    proposal.save()
+            return redirect(request.path + '#proposal-updates')
+        elif "update_abstract" in request.POST:
+            if admin:
+                action = request.POST["update_abstract"]
+                if action == "Apply":
+                    proposal.presentation.abstract = proposal.abstract
+                    proposal.presentation.save()
+                elif action == "Reject":
+                    proposal.abstract = proposal.presentation.abstract
+                    proposal.save()
+            return redirect(request.path + '#proposal-updates')
     else:
         initial = {}
         if latest_vote:
