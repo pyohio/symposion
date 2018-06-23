@@ -67,6 +67,20 @@ class SponsorLevel(models.Model):
         return self.sponsor_set.filter(active=True).order_by("added")
 
 
+class IndividualSponsor(models.Model):
+    name = models.CharField(_("Sponsor Name"), max_length=100)
+    display_name = models.CharField(_("Display Name"), max_length=100, blank=True)
+    is_anonymous = models.BooleanField(_("Anonymous?"), default=False)
+    amount = models.IntegerField(_("Donation Amount"), default=50)
+    added = models.DateTimeField(_("added"), default=datetime.datetime.now)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['-amount', 'added']
+
+
 @python_2_unicode_compatible
 class Sponsor(models.Model):
 

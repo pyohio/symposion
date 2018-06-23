@@ -10,6 +10,7 @@ from symposion.sponsorship.models import (
     Benefit,
     BENEFITS,
     BenefitLevel,
+    IndividualSponsor,
     Sponsor,
     SponsorBenefit,
     SponsorLevel,
@@ -35,6 +36,9 @@ class SponsorBenefitInline(admin.StackedInline):
         })
     ]
 
+
+class IndividualSponsorAdmin(admin.ModelAdmin):
+    model = IndividualSponsor
 
 class SponsorAdmin(admin.ModelAdmin):
 
@@ -128,3 +132,4 @@ admin.site.register(SponsorLevel, SponsorLevelAdmin)
 admin.site.register(Sponsor, SponsorAdmin)
 admin.site.register(Benefit, BenefitAdmin)
 admin.site.register(SponsorBenefit, SponsorBenefitAdmin)
+admin.site.register(IndividualSponsor, IndividualSponsorAdmin)
