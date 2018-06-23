@@ -22,8 +22,8 @@ from account.decorators import login_required
 
 from symposion.sponsorship.forms import SponsorApplicationForm, \
     SponsorDetailsForm, SponsorBenefitsFormSet
-from symposion.sponsorship.models import Benefit, Sponsor, SponsorBenefit, \
-    SponsorLevel
+from symposion.sponsorship.models import Benefit, IndividualSponsor, \
+        Sponsor, SponsorBenefit, SponsorLevel
 
 
 log = logging.getLogger(__name__)
@@ -70,6 +70,15 @@ def sponsor_add(request):
 
     return render(request, "symposion/sponsorship/add.html", {
         "form": form,
+    })
+
+
+def sponsor_list(request):
+    individuals = IndividualSponsor.objects.filter(is_anonymous=False)
+    anonymous_individuals = len(IndividualSponsor.objects.filter(is_anonymous=True))
+    return render(request, "symposion/sponsorship/list.html", {
+        "anonymous_individuals": anonymous_individuals,
+        "individual_sponsors": individuals,
     })
 
 
