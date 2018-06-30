@@ -37,7 +37,7 @@ class Day(models.Model):
     date = models.DateField(verbose_name=_("Date"))
 
     def __str__(self):
-        return "%s" % self.date
+        return "%s (%s)" % (self.date, self.schedule)
 
     class Meta:
         unique_together = [("schedule", "date")]
