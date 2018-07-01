@@ -34,7 +34,7 @@ class TimeTable(object):
             row = {"time": time, "slots": []}
             for slot in slots:
                 if slot.start == time:
-                    if slot.override_rowspan is not none:
+                    if slot.override_rowspan:
                         slot.rowspan = slot.override_rowspan
                     else:
                         slot.rowspan = TimeTable.rowspan(times, slot.start, slot.end)
