@@ -89,6 +89,7 @@ class Slot(models.Model):
     end = models.TimeField(verbose_name=_("End"))
     content_override = models.TextField(blank=True, verbose_name=_("Content override"))
     content_override_html = models.TextField(blank=True)
+    override_rowspan = models.IntegerField(blank=True, null=True)
 
     def assign(self, content):
         """

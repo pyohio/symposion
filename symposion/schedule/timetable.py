@@ -34,7 +34,10 @@ class TimeTable(object):
             row = {"time": time, "slots": []}
             for slot in slots:
                 if slot.start == time:
-                    slot.rowspan = TimeTable.rowspan(times, slot.start, slot.end)
+                    if slot.override_rowspan is not none:
+                        slot.rowspan = slot.override_rowspan
+                    else:
+                        slot.rowspan = TimeTable.rowspan(times, slot.start, slot.end)
                     slot.colspan = slot.room_count
                     row["slots"].append(slot)
             if row["slots"] or next_time is None:
