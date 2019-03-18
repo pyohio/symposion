@@ -75,7 +75,11 @@ def sponsor_add(request):
 def _sponsor_data(sponsor):
     data = {
         'name': sponsor.name,
-        'level': sponsor.level,
+        'level': {
+            'name': sponsor.level.name,
+            'cost': sponsor.level.cost,
+            'order': sponsor.level.order,
+        },
         'description': None,  # TODO: get from benefit
         'web_logo': None,  # TODO: get from benefit
         'print_logo': None, # TODO: get from benefit
@@ -87,7 +91,6 @@ def sponsor_json(request):
     active_sponsors = Sponsor.objects.filter(active=True)
     sponsors = [_sponsor_data(sponsor) for sponsor in active_sponsors]
     sponsorship_data = {
-        'levels': None,
         'sponsors': sponsors,
     }
     return JsonResponse(sponsorship_data)
