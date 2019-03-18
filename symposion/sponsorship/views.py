@@ -13,7 +13,7 @@ from zipfile import ZipFile, ZipInfo
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -72,6 +72,25 @@ def sponsor_add(request):
         "form": form,
     })
 
+def _sponsor_data(sponsor):
+    data = {
+        'name': sponsor.name,
+        'level': sponsor.level,
+        'description': None,  # TODO: get from benefit
+        'web_logo': None,  # TODO: get from benefit
+        'print_logo': None, # TODO: get from benefit
+        'activation_date': None  # TODO: add field
+    }
+    return data
+
+def sponsor_json(request):
+    active_sponsors = Sponsor.objects.filter(active=True)
+    sponsors = [_sponsor_data(sponsor) for sponsor in active_sponsors]
+    sponsorship_data = {
+        'levels': None,
+        'sponsors': sponsors,
+    }
+    return JsonResponse(sponsorship_data)
 
 def sponsor_list(request):
     individuals = IndividualSponsor.objects.filter(is_anonymous=False)
