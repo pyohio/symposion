@@ -75,11 +75,9 @@ def sponsor_add(request):
 def _sponsor_data(sponsor):
     data = {
         'name': sponsor.name,
-        'level': {
-            'name': sponsor.level.name,
-            'cost': sponsor.level.cost,
-            'order': sponsor.level.order,
-        },
+        'level_name': sponsor.level.name,
+        'level_cost': sponsor.level.cost,
+        'level_order': sponsor.level.order,
         'description': None,  # TODO: get from benefit
         'web_logo': None,  # TODO: get from benefit
         'print_logo': None, # TODO: get from benefit
@@ -87,13 +85,25 @@ def _sponsor_data(sponsor):
     }
     return data
 
-def sponsor_json(request):
+def sponsors_json(request):
     active_sponsors = Sponsor.objects.filter(active=True)
     sponsors = [_sponsor_data(sponsor) for sponsor in active_sponsors]
     sponsorship_data = {
         'sponsors': sponsors,
     }
     return JsonResponse(sponsorship_data)
+
+def sponsors_by_level_json(request):
+    levels = SponsorLevel.objects.all(filter)
+    return JsonResponse({})
+
+def individual_sponsors_json(request):
+    individuals = [dict(sponsor) for sponsor in IndividualSponsor.objects.filter(is_anonymous=False)]
+    anonymous_count = len(IndividualSponsor.objects.filter(is_anonymous=True))
+    return JsonResponse({
+        'individuals': individuals,
+        'anonymous_count': anonymous_count,
+    })
 
 def sponsor_list(request):
     individuals = IndividualSponsor.objects.filter(is_anonymous=False)
@@ -102,7 +112,6 @@ def sponsor_list(request):
         "anonymous_individuals": anonymous_individuals,
         "individual_sponsors": individuals,
     })
-
 
 @login_required
 def sponsor_detail(request, pk):
