@@ -139,9 +139,9 @@ class Sponsor(models.Model):
 
     @property
     def twitter_handle(self):
-        twitter_benefit = self.sponsor_benefits.get(benefit__name="Twitter")
-        if twitter_benefit:
-            return twitter_benefit.text.lstrip('@')
+        twitter_benefit = self.sponsor_benefits.filter(benefit__name="Twitter")
+        if twitter_benefit.count():
+            return twitter_benefit[0].text.lstrip('@')
         else:
             return None
 
