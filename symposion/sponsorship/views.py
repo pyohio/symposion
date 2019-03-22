@@ -73,14 +73,16 @@ def sponsor_add(request):
     })
 
 def _sponsor_data(sponsor):
+    description_benefit = Benefit.objects.filter(name='Sponsor Description')
+    print_logo_benefit = Benefit.objects.filter(name='Print Logo')
+    twitter_benefit = Benefit.objects.filter(name='Twitter')
+    web_logo_benefit = Benefit.objects.filter(name='Web Logo')
+    
     data = {
         'name': sponsor.name,
-        'level_name': sponsor.level.name,
-        'level_cost': sponsor.level.cost,
-        'level_order': sponsor.level.order,
-        'description': None,  # TODO: get from benefit
-        'web_logo': None,  # TODO: get from benefit
-        'print_logo': None, # TODO: get from benefit
+        'description': sponsor.listing_text,
+        'web_logo': sponsor.website_logo.url,
+        'twitter': sponsor.twitter_handle,
         'activation_date': None  # TODO: add field
     }
     return data
@@ -94,8 +96,19 @@ def sponsors_json(request):
     return JsonResponse(sponsorship_data)
 
 def sponsors_by_level_json(request):
-    levels = SponsorLevel.objects.all(filter)
-    return JsonResponse({})
+    levels = SponsorLevel.objects.all() #filter(order__lt=100).order_by('order')
+    sponsors_level_data = []
+    for level in levels:
+        level_sponsors = [_sponsor_data(sponsor) for sponsor in level.sponsors()]
+        level_data = {
+            'name': level.name,
+            'cost': level.cost,
+            'order': level.order,
+            'sponsors': level_sponsors,
+        }
+        sponsors_level_data.append(level_data)
+
+    return JsonResponse(sponsors_level_data, safe=False)
 
 def individual_sponsors_json(request):
     individuals = [dict(sponsor) for sponsor in IndividualSponsor.objects.filter(is_anonymous=False)]

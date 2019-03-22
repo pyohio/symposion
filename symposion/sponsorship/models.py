@@ -138,6 +138,14 @@ class Sponsor(models.Model):
             return self.external_url
 
     @property
+    def twitter_handle(self):
+        twitter_benefit = self.sponsor_benefits.get(benefit__name="Twitter")
+        if twitter_benefit:
+            return twitter_benefit.text.lstrip('@')
+        else:
+            return None
+
+    @property
     def website_logo(self):
         if self.sponsor_logo is None:
             benefits = self.sponsor_benefits.filter(
