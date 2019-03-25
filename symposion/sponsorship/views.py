@@ -77,11 +77,15 @@ def _sponsor_data(sponsor):
     print_logo_benefit = Benefit.objects.filter(name='Print Logo')
     twitter_benefit = Benefit.objects.filter(name='Twitter')
     web_logo_benefit = Benefit.objects.filter(name='Web Logo')
-    
+
     data = {
         'name': sponsor.name,
+        'url': sponsor.external_url,
         'description': sponsor.listing_text,
-        'web_logo': sponsor.website_logo.url,
+        'web_logo': {
+            'url': sponsor.website_logo.url,
+            'description': '{} Logo'.format(sponsor.name),
+            },
         'twitter': sponsor.twitter_handle,
         'activation_date': None  # TODO: add field
     }
