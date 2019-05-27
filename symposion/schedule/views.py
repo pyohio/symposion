@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import json
 
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader, Context
 
@@ -86,6 +86,50 @@ def schedule_list(request, slug=None):
     }
     return render(request, "symposion/schedule/schedule_list.html", ctx)
 
+def _speaker_data(speaker):
+    data = {
+        "id": speaker.id,
+        "biography": speaker.biography,
+        "biography_html": speaker.biography_html,
+        "name": speaker.name,
+    }
+    try:
+        data["photo"] = speaker.photo.url
+    except ValueError:
+        data["photo"] = None
+
+    return data
+
+def _presentation_data(presentation):
+    speakers_data = [_speaker_data(presentation.speaker)]
+    speakers_data.extend([_speaker_data(s) for s in presentation.proposal.additional_speakers.all()])
+    data = {
+        "id": presentation.id,
+        "title": presentation.title,
+        "abstract": presentation.abstract,
+        "abstract_html": presentation.abstract_html,
+        "description": presentation.description,
+        "description_html": presentation.description_html,
+        "schedule": {  # TODO: include schedule time & location
+            "start": None,
+            "end": None,
+            "room": None,
+        },
+        "speakers": [ speakers_data ]
+    }
+    return data
+
+def schedule_list_json(request, slug=None):
+    schedule = fetch_schedule(slug)
+    if not schedule.published and not request.user.is_staff:
+        raise Http404()
+
+    presentations = Presentation.objects.filter(section=schedule.section)
+    presentations = presentations.exclude(cancelled=True).order_by("title")
+
+    all_data = [_presentation_data(p) for p in presentations]
+
+    return JsonResponse(all_data, safe=False)
 
 def schedule_list_csv(request, slug=None):
     schedule = fetch_schedule(slug)
@@ -329,3 +373,6 @@ def session_detail(request, session_id):
         "runner": runner,
         "runner_denied": runner_denied,
     })
+
+def speaker_list_json(request):
+    return JsonResponse({})
