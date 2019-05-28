@@ -119,6 +119,13 @@ def _presentation_data(presentation):
     }
     return data
 
+def _presentation_summary(presentation):
+    data = {
+        "id": presentation.id,
+        "title": presentation.title,
+    }
+    return data
+
 def schedule_list_json(request, slug=None):
     schedule = fetch_schedule(slug)
     if not schedule.published and not request.user.is_staff:
@@ -130,6 +137,37 @@ def schedule_list_json(request, slug=None):
     all_data = [_presentation_data(p) for p in presentations]
 
     return JsonResponse(all_data, safe=False)
+
+def _get_presentations_from_section(section_slug):
+    schedule = fetch_schedule(section_slug)
+    presentations = Presentation.objects.filter(section=schedule.section)
+    presentations = presentations.exclude(cancelled=True).order_by("title")
+    return presentations
+
+
+def speaker_list_json(request):
+    # TODO: refactor this mess
+    talks = _get_presentations_from_section('talks')
+    tutorials = _get_presentations_from_section('tutorials')
+    all_sessions = list(talks) + list(tutorials)
+    all_speakers = set()
+    speaker_sessions = {}
+    for session in all_sessions:
+        all_speakers.add(session.speaker)
+        if session.speaker.id in speaker_sessions:
+            speaker_sessions[session.speaker.id].append(session)
+        else:
+            speaker_sessions[session.speaker.id] = [session]
+        for speaker in session.proposal.additional_speakers.all():
+            all_speakers.add(speaker)
+            if speaker.id in speaker_sessions:
+                speaker_sessions[speaker.id].append(session)
+            else:
+                speaker_sessions[speaker.id] = [session]
+    speakers_data = [_speaker_data(s) for s in list(all_speakers)]
+    for speaker_data in speakers_data:
+        speaker_data['presentations'] = [_presentation_summary(p) for p in speaker_sessions[speaker_data['id']]]
+    return JsonResponse(speakers_data, safe=False)
 
 def schedule_list_csv(request, slug=None):
     schedule = fetch_schedule(slug)
@@ -374,5 +412,3 @@ def session_detail(request, session_id):
         "runner_denied": runner_denied,
     })
 
-def speaker_list_json(request):
-    return JsonResponse({})
