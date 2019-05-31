@@ -88,7 +88,7 @@ def schedule_list(request, slug=None):
 
 def _speaker_data(speaker):
     data = {
-        "id": speaker.id,
+        "speaker_id": speaker.id,
         "biography": speaker.biography,
         "biography_html": speaker.biography_html,
         "name": speaker.name,
@@ -104,7 +104,7 @@ def _presentation_data(presentation):
     speakers_data = [_speaker_data(presentation.speaker)]
     speakers_data.extend([_speaker_data(s) for s in presentation.proposal.additional_speakers.all()])
     data = {
-        "id": presentation.id,
+        "presentation_id": presentation.id,
         "title": presentation.title,
         "abstract": presentation.abstract,
         "abstract_html": presentation.abstract_html,
@@ -121,7 +121,7 @@ def _presentation_data(presentation):
 
 def _presentation_summary(presentation):
     data = {
-        "id": presentation.id,
+        "presentation_id": presentation.id,
         "title": presentation.title,
     }
     return data
@@ -166,7 +166,7 @@ def speaker_list_json(request):
                 speaker_sessions[speaker.id] = [session]
     speakers_data = [_speaker_data(s) for s in list(all_speakers)]
     for speaker_data in speakers_data:
-        speaker_data['presentations'] = [_presentation_summary(p) for p in speaker_sessions[speaker_data['id']]]
+        speaker_data['presentations'] = [_presentation_summary(p) for p in speaker_sessions[speaker_data['speaker_id']]]
     return JsonResponse(speakers_data, safe=False)
 
 def schedule_list_csv(request, slug=None):
