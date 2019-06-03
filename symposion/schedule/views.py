@@ -114,6 +114,7 @@ def _presentation_data(presentation):
         "abstract_html": presentation.abstract_html,
         "description": presentation.description,
         "description_html": presentation.description_html,
+        "kind": str(presentation.proposal.kind),
         "schedule": {  # TODO: include schedule time & location
             "start": None,
             "end": None,
@@ -127,6 +128,7 @@ def _presentation_summary(presentation):
     data = {
         "presentation_id": presentation.id,
         "title": presentation.title,
+        "kind": str(presentation.proposal.kind),
     }
     return data
 
