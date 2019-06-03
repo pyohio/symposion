@@ -92,9 +92,13 @@ def _speaker_data(speaker):
         "biography": speaker.biography,
         "biography_html": speaker.biography_html,
         "name": speaker.name,
+        "twitter": None,
     }
     try:
-        data["photo"] = speaker.photo.url
+        data["photo"] = {
+            "description": speaker.name,
+            "url": speaker.photo.url
+        }
     except ValueError:
         data["photo"] = None
 
