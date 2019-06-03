@@ -100,8 +100,10 @@ def _speaker_data(speaker):
             "url": speaker.photo.url
         }
     except ValueError:
-        data["photo"] = None
-
+        data["photo"] = {
+            "description": speaker.name,
+            "url": "https://static-cfp.pyohio.org/speaker_photo/default.png",
+        }
     return data
 
 def _presentation_data(presentation):
