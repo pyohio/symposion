@@ -92,7 +92,7 @@ def _speaker_data(speaker):
         "biography": speaker.biography,
         "biography_html": speaker.biography_html,
         "name": speaker.name,
-        "twitter": None,
+        "twitter": '',
     }
     try:
         data["photo"] = {
@@ -107,8 +107,10 @@ def _speaker_data(speaker):
     return data
 
 def _presentation_data(presentation):
+    from pprint import pprint
     speakers_data = [_speaker_data(presentation.speaker)]
-    speakers_data.extend([_speaker_data(s) for s in presentation.proposal.additional_speakers.all()])
+    additional_speakers = [_speaker_data(s) for s in presentation.proposal.additional_speakers.all()]
+    speakers_data.extend(additional_speakers)
     data = {
         "presentation_id": presentation.id,
         "title": presentation.title,
@@ -118,11 +120,11 @@ def _presentation_data(presentation):
         "description_html": presentation.description_html,
         "kind": str(presentation.proposal.kind),
         "schedule": {  # TODO: include schedule time & location
-            "start": None,
-            "end": None,
-            "room": None,
+            "start": 'start TBD',
+            "end": 'end TBD',
+            "room": 'room TBD',
         },
-        "speakers": [ speakers_data ]
+        "speakers": speakers_data
     }
     return data
 
