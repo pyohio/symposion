@@ -16,6 +16,9 @@ from symposion.schedule.forms import SlotEditForm, ScheduleSectionForm
 from symposion.schedule.models import Schedule, Day, Slot, Presentation, Session, SessionRole
 from symposion.schedule.timetable import TimeTable
 
+# FIXME: It is bad that I'm importing this and I feel bad:
+from pinaxcon.proposals.models import ConferenceSpeaker
+
 
 def fetch_schedule(slug):
     qs = Schedule.objects.all()
@@ -92,7 +95,6 @@ def _speaker_data(speaker):
         "biography": speaker.biography,
         "biography_html": speaker.biography_html,
         "name": speaker.name,
-        "twitter": '',
     }
     try:
         data["photo"] = {
@@ -104,6 +106,12 @@ def _speaker_data(speaker):
             "description": speaker.name,
             "url": "https://static-cfp.pyohio.org/speaker_photo/default.png",
         }
+    try:
+        # Reaching into the app to get extra speaker data for now:
+        full_speaker = ConferenceSpeaker.objects.get(speakerbase_ptr=speaker)
+        data["twitter"] = full_speaker.twitter_username
+    except:
+        data["twitter"] = ''
     return data
 
 def _presentation_data(presentation):
