@@ -17,7 +17,7 @@ from symposion.schedule.models import Schedule, Day, Slot, Presentation, Session
 from symposion.schedule.timetable import TimeTable
 
 # FIXME: It is bad that I'm importing this and I feel bad:
-from pinaxcon.proposals.models import ConferenceSpeaker
+from pinaxcon.proposals.models import ConferenceSpeaker, ConferenceSpeakerOrganizerRoles
 
 
 def fetch_schedule(slug):
@@ -89,7 +89,9 @@ def schedule_list(request, slug=None):
     }
     return render(request, "symposion/schedule/schedule_list.html", ctx)
 
-def _speaker_data(speaker):
+def _speaker_data(speaker, extras=None):
+    if extras is None:
+        extras = {}
     data = {
         "speaker_id": speaker.id,
         "biography": speaker.biography,
@@ -112,6 +114,7 @@ def _speaker_data(speaker):
         data["twitter"] = full_speaker.twitter_username
     except:
         data["twitter"] = ''
+    data.update(extras)
     return data
 
 def _presentation_data(presentation):
@@ -186,6 +189,19 @@ def speaker_list_json(request):
     for speaker_data in speakers_data:
         speaker_data['presentations'] = [_presentation_summary(p) for p in speaker_sessions[speaker_data['speaker_id']]]
     return JsonResponse(speakers_data, safe=False)
+
+
+def organizer_list_json(request):
+    csors = ConferenceSpeakerOrganizerRoles.objects.order_by('roles')
+    speaker_roles = []
+    for csor in csors:
+        current_roles = (csor.speaker, [r.title for r in csor.roles.all()])
+        if current_roles not in speaker_roles:
+            speaker_roles.append(current_roles)
+
+    organizer_data = [_speaker_data(s[0], extras={'organizer_roles': s[1]}) for s in speaker_roles]
+    return JsonResponse(organizer_data, safe=False)
+
 
 def schedule_list_csv(request, slug=None):
     schedule = fetch_schedule(slug)
