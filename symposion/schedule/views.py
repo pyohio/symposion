@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import hashlib
 import json
 
 from django.core.urlresolvers import reverse
@@ -104,9 +105,11 @@ def _speaker_data(speaker, extras=None):
             "url": speaker.photo.url
         }
     except ValueError:
+        speaker_hash = hashlib.md5(speaker.email).hexdigest()
+        gravatar_url = "https://www.gravatar.com/avatar/{}?s=250&r=g&d=http%3A%2F%2Fstatic-cfp.pyohio.org%2Fspeaker_photo%2Fdefault.png".format(speaker_hash)
         data["photo"] = {
             "description": speaker.name,
-            "url": "https://static-cfp.pyohio.org/speaker_photo/default.png",
+            "url": gravatar_url,
         }
     try:
         # Reaching into the app to get extra speaker data for now:
