@@ -140,6 +140,9 @@ def _presentation_data(presentation):
         },
         "speakers": speakers_data
     }
+    if presentation.proposal.hasattr("prerequisite_setup_html"):
+        data["prerequisite_setup_html"] = presentation.proposal.prerequisite_setup_html
+
     return data
 
 def _presentation_summary(presentation):
