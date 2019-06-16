@@ -133,16 +133,24 @@ def _presentation_data(presentation):
         "description": presentation.description,
         "description_html": presentation.description_html,
         "kind": str(presentation.proposal.kind),
-        "schedule": {  # TODO: include schedule time & location
-            "start": 'start TBD',
-            "end": 'end TBD',
-            "room": 'room TBD',
-        },
         "speakers": speakers_data
     }
     if hasattr(presentation.proposal, "prerequisite_setup_html"):
         data["prerequisite_setup_html"] = presentation.proposal.prerequisite_setup_html
-
+    
+    if presentation.slot is None:
+        schedule = {
+            "start": 'start TBD',
+            "end": 'end TBD',
+            "room": 'room TBD',
+            }
+    else:
+        schedule = {
+            "start": presentation.slot.start_datetime.isoformat(),
+            "end": presentation.slot.end_datetime.isoformat(),
+            "room": presentation.slot.room_names,
+        }
+    data["schedule"] = schedule
     return data
 
 def _presentation_summary(presentation):
