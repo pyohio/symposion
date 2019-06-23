@@ -231,6 +231,7 @@ def _slots_json(request):
         slot_data = {
             "room": ", ".join(room["name"] for room in slot.rooms.values()),
             "rooms": [room["name"] for room in slot.rooms.values()],
+            "room_order": min([room["order"] for room in slot.rooms.values()]),
             "start": slot.start_datetime.isoformat(),
             "end": slot.end_datetime.isoformat(),
             "duration": slot.length_in_minutes,
