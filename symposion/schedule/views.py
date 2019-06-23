@@ -216,6 +216,49 @@ def organizer_list_json(request):
     organizer_data = [_speaker_data(s[0], extras={'organizer_roles': s[1]}) for s in speaker_roles]
     return JsonResponse(organizer_data, safe=False)
 
+def slots_list_json(request):
+    return JsonResponse(_slots_json(request), safe=False)
+
+def _slots_json(request):
+    slots = Slot.objects.filter(
+        day__schedule__published=True,
+        day__schedule__hidden=False
+    ).order_by("start")
+
+    data = []
+
+    for slot in slots:
+        slot_data = {
+            "room": ", ".join(room["name"] for room in slot.rooms.values()),
+            "rooms": [room["name"] for room in slot.rooms.values()],
+            "start": slot.start_datetime.isoformat(),
+            "end": slot.end_datetime.isoformat(),
+            "duration": slot.length_in_minutes,
+            "kind": slot.kind.label,
+            "section": slot.day.schedule.section.slug,
+            "slot_id": slot.pk,
+            "title": "Presentation TBD",
+            "speakers": None,
+            "description_html": None,
+            "cancelled": False,
+            "presentation_id": None,
+        }
+        if hasattr(slot.content, "proposal"):
+            slot_data.update({
+                "title": slot.content.title,
+                "speakers": [{'name': s.name, 'speaker_id': s.id} for s in slot.content.speakers()],
+                "description_html": slot.content.description_html,
+                "cancelled": slot.content.cancelled,
+                "presentation_id": slot.content.id,
+            })
+        else:
+            slot_data.update({
+                "title": slot.content_override if slot.content_override else "Presentation TBD",
+            })
+        data.append(slot_data)
+    return data
+
+
 
 def schedule_list_csv(request, slug=None):
     schedule = fetch_schedule(slug)
@@ -365,11 +408,7 @@ def _schedule_json(request):
                 ] if request.user.is_staff else ["redacted"],
                 "abstract": slot.content.abstract,
                 "description": slot.content.description,
-                "conf_url": "%s://%s%s" % (
-                    protocol,
-                    Site.objects.get_current().domain,
-                    reverse("schedule_presentation_detail", args=[slot.content.pk])
-                ),
+                "conf_url": "https://www.pyohio.org/2019/presentations/%s" % (slot.content.id),
                 "cancelled": slot.content.cancelled,
             })
         else:

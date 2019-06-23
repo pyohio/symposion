@@ -16,6 +16,7 @@ from .views import (
     session_detail,
     speaker_list_json,
     organizer_list_json,
+    slots_list_json,
 )
 
 urlpatterns = [
@@ -26,6 +27,7 @@ urlpatterns = [
     url(r"^presentation/(\d+)/$", schedule_presentation_detail, name="schedule_presentation_detail"),
     url(r"^organizers/list/json/$", organizer_list_json, name="organizer_list_json"),
     url(r"^speakers/list/json/$", speaker_list_json, name="speaker_list_json"),
+    url(r"^slots/list/json/$", slots_list_json, name="slots_list_json"),
     url(r"^([\w\-]+)/$", schedule_detail, name="schedule_detail"),
     url(r"^([\w\-]+)/edit/$", schedule_edit, name="schedule_edit"),
     url(r"^([\w\-]+)/list/$", schedule_list, name="schedule_list"),
