@@ -238,6 +238,7 @@ def _slots_json(request):
             "section": slot.day.schedule.section.slug,
             "slot_id": slot.pk,
             "title": "Presentation TBD",
+            "speaker_name": None,
             "speakers": None,
             "description_html": None,
             "cancelled": False,
@@ -246,6 +247,7 @@ def _slots_json(request):
         if hasattr(slot.content, "proposal"):
             slot_data.update({
                 "title": slot.content.title,
+                "speaker_name": ", ".join([s.name for s in slot.content.speakers()]),
                 "speakers": [{'name': s.name, 'speaker_id': s.id} for s in slot.content.speakers()],
                 "description_html": slot.content.description_html,
                 "cancelled": slot.content.cancelled,
