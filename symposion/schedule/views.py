@@ -115,8 +115,12 @@ def _speaker_data(speaker, extras=None):
         # Reaching into the app to get extra speaker data for now:
         full_speaker = ConferenceSpeaker.objects.get(speakerbase_ptr=speaker)
         data["twitter"] = full_speaker.twitter_username
+        data["mastodon"] = full_speaker.mastodon_username
+        data["website"] = full_speaker.website_url
     except:
-        data["twitter"] = ''
+        data["twitter"] = None
+        data["mastodon"] = None
+        data["website"] = None
     data.update(extras)
     return data
 
