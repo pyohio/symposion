@@ -260,7 +260,8 @@ def _slots_json(request):
             })
         else:
             slot_data.update({
-                "title": slot.content_override if slot.content_override else "Presentation TBD",
+                "title": slot.title_override if slot.title_override else "TBD",
+                "description_html": slot.content_override_html,
             })
         data.append(slot_data)
     return data
