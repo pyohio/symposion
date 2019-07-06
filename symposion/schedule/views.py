@@ -39,6 +39,7 @@ def fetch_schedule(slug):
 def schedule_conference(request):
 
     sections = []
+    conference_days = {}
 
     if request.user.is_staff:
         section_days = Day.objects.filter(
@@ -48,14 +49,19 @@ def schedule_conference(request):
                 schedule__published=True).order_by('date')
 
     for sd in section_days:
-        days = [TimeTable(sd)]
-        sections.append({
+        tt = TimeTable(sd)
+        slots = Slot.objects.filter(day=sd).exclude(kind__label__in=['nothing', 'break'])
+        if tt.day.date.isoformat() not in conference_days:
+            conference_days[tt.day.date.isoformat()] = {
+                "date": tt.day.date
+            }
+        conference_days[tt.day.date.isoformat()][sd.schedule.section.slug.replace('-', '_')] = {
             "schedule": sd.schedule,
-            "days": days,
-            })
-
+            "timetable": tt,
+            "slots": slots,
+            }
     ctx = {
-        "sections": sections,
+        "day_timetables": conference_days.values(),
     }
     return render(request, "symposion/schedule/schedule_conference.html", ctx)
 
