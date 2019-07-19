@@ -142,6 +142,7 @@ def _presentation_data(presentation):
         "abstract_html": presentation.abstract_html,
         "description": presentation.description,
         "description_html": presentation.description_html,
+        "feedback_url": presentation.feedback_url,
         "kind": str(presentation.proposal.kind),
         "speakers": speakers_data
     }
