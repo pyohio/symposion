@@ -248,6 +248,7 @@ def _slots_json(request):
             "duration": slot.length_in_minutes,
             "kind": slot.kind.label,
             "section": slot.day.schedule.section.slug,
+            "section_name": slot.day.schedule.section.name,
             "slot_id": slot.pk,
             "title": "Presentation TBD",
             "speaker_name": None,
