@@ -410,7 +410,7 @@ def _schedule_json(request):
             # these are model features from other conferences that have forked symposion
             # these have been used almost everywhere and are good candidates for
             # base proposals
-            "license": "CC BY",
+            "license": "youtube",
             "tags": "",
             "released": True,
             "contact": [],
