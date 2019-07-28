@@ -162,6 +162,7 @@ def _presentation_data(presentation):
             "room": presentation.slot.room_names,
         }
     data["schedule"] = schedule
+    data["start_time"] = data["schedule"]["start"]
     return data
 
 def _presentation_summary(presentation):
