@@ -247,6 +247,7 @@ def _slots_json(request):
             "start": slot.start_datetime.isoformat(),
             "end": slot.end_datetime.isoformat(),
             "duration": slot.length_in_minutes,
+            "feedback_url": None,
             "kind": slot.kind.label,
             "section": slot.day.schedule.section.slug,
             "section_name": slot.day.schedule.section.name,
@@ -264,6 +265,7 @@ def _slots_json(request):
                 "speaker_name": ", ".join([s.name for s in slot.content.speakers()]),
                 "speakers": [{'name': s.name, 'speaker_id': s.id} for s in slot.content.speakers()],
                 "description_html": slot.content.description_html,
+                "feedback_url": slot.content.feedback_url,
                 "cancelled": slot.content.cancelled,
                 "presentation_id": slot.content.id,
             })
