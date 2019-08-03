@@ -144,7 +144,8 @@ def _presentation_data(presentation):
         "description_html": presentation.description_html,
         "feedback_url": presentation.feedback_url,
         "kind": str(presentation.proposal.kind),
-        "speakers": speakers_data
+        "speakers": speakers_data,
+        "youtube_url": presentation.youtube_url,
     }
     if hasattr(presentation.proposal, "prerequisite_setup_html"):
         data["prerequisite_setup_html"] = presentation.proposal.prerequisite_setup_html
@@ -258,6 +259,7 @@ def _slots_json(request):
             "description_html": None,
             "cancelled": False,
             "presentation_id": None,
+            "youtube_url": None,
         }
         if hasattr(slot.content, "proposal"):
             slot_data.update({
@@ -268,6 +270,7 @@ def _slots_json(request):
                 "feedback_url": slot.content.feedback_url,
                 "cancelled": slot.content.cancelled,
                 "presentation_id": slot.content.id,
+                "youtube_url": slot.content.youtube_url,
             })
         else:
             slot_data.update({

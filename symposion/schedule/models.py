@@ -202,7 +202,8 @@ class Presentation(models.Model):
     cancelled = models.BooleanField(default=False, verbose_name=_("Cancelled"))
     proposal_base = models.OneToOneField(ProposalBase, related_name="presentation", verbose_name=_("Proposal base"))
     section = models.ForeignKey(Section, related_name="presentations", verbose_name=_("Section"))
-    feedback_url = models.URLField(null=True)
+    feedback_url = models.URLField(blank=True, null=True)
+    youtube_url = models.URLField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.description_html = parse(self.description)
