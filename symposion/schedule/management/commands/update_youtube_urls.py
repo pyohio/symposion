@@ -43,10 +43,8 @@ class Command(BaseCommand):
         response_data = response.json()
         presentation_videos = {}
         for slot in response_data:
-            if slot["state"] == 10:
+            if slot["state"] >= 10:
                 presentation_id = slot.get("conf_url", "").split("/")[-1]
-                if presentation_id == "111":
-                    presentation_id = "1"
                 youtube_url = slot.get("host_url", "")
                 logger.info("Presentation %s has youtube URL: %s", presentation_id, youtube_url)
                 if youtube_url:
